@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Masters Trivia Challenge</title>
+  <style>
+    body {
+      background-color: #f0f8f5;
+      font-family: 'Segoe UI', sans-serif;
+      color: #1f3d2c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #2e8b57;
+      margin-bottom: 10px;
+    }
+
+    .quiz-box {
+      background-color: #ffffff;
+      border: 2px solid #2e8b57;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      background-color: #e6f2e6;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    .answers button:hover {
+      background-color: #d0e6d0;
+    }
+
+    .result {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-top: 15px;
+    }
+
+    .start-over {
+      margin-top: 20px;
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .start-over:hover {
+      background-color: #256d45;
+    }
+
+    a.back-link {
+      margin-top: 30px;
+      display: inline-block;
+      text-decoration: none;
+      color: #2e8b57;
+      font-weight: bold;
+    }
+
+    a.back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Masters Trivia Challenge ⛳</h1>
+  <div class="quiz-box" id="quiz-box">
+    <div class="question" id="question">Loading...</div>
+    <div class="answers" id="answers"></div>
+    <div class="result" id="result"></div>
+    <button class="start-over" id="restartBtn" style="display:none;">Play Again</button>
+    <button class="start-over" id="backBtn" style="display:none;">Return to Masters Page</button>
+
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "Where is The Masters Tournament played each year?",
+        answers: ["Pebble Beach", "Augusta National", "St. Andrews", "TPC Sawgrass"],
+        correct: "Augusta National"
+      },
+      {
+        question: "What color jacket is awarded to the winner?",
+        answers: ["Red", "Blue", "Green", "Gold"],
+        correct: "Green"
+      },
+      {
+        question: "Which golfer has won The Masters the most times?",
+        answers: ["Tiger Woods", "Arnold Palmer", "Phil Mickelson", "Jack Nicklaus"],
+        correct: "Jack Nicklaus"
+      },
+      {
+        question: "In what month is The Masters typically held?",
+        answers: ["March", "April", "June", "September"],
+        correct: "April"
+      },
+      {
+        question: "What is the nickname of the challenging holes 11-13?",
+        answers: ["The Bermuda Triangle", "Tiger's Row", "Amen Corner", "The Final Stretch"],
+        correct: "Amen Corner"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const resultEl = document.getElementById('result');
+    const restartBtn = document.getElementById('restartBtn');
+    const backBtn = document.getElementById('backBtn');
+
+
+    function showQuestion() {
+      const q = quizData[currentQuestion];
+      questionEl.textContent = q.question;
+      answersEl.innerHTML = "";
+      resultEl.textContent = "";
+
+      q.answers.forEach(answer => {
+        const btn = document.createElement('button');
+        btn.textContent = answer;
+        btn.onclick = () => checkAnswer(answer);
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const correct = quizData[currentQuestion].correct;
+      if (selected === correct) {
+        resultEl.textContent = "✅ Correct!";
+        score++;
+      } else {
+        resultEl.textContent = `❌ Oops! The correct answer was: ${correct}`;
+      }
+
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        setTimeout(showQuestion, 1200);
+      } else {
+        setTimeout(showScore, 1200);
+      }
+    }
+
+    function showScore() {
+      questionEl.textContent = "🏁 You've finished the challenge!";
+      answersEl.innerHTML = "";
+      resultEl.textContent = `You got ${score} out of ${quizData.length} correct.`;
+      restartBtn.style.display = "inline-block";
+      backBtn.style.display = "inline-block";
+
+    }
+
+    restartBtn.onclick = () => {
+      currentQuestion = 0;
+      score = 0;
+      restartBtn.style.display = "none";
+      showQuestion();
+    };
+
+    backBtn.onclick = () => {
+      window.location.href = "scratch.html"; // Make sure this matches your scratch page filename
+    };
+
+    showQuestion(); //Start quiz
+
+  </script>
+
+</body>
+</html>
